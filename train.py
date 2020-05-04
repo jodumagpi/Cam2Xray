@@ -25,7 +25,7 @@ from models import create_model
 from util.visualizer import Visualizer
 from zipfile import ZipFile 
 import os
-from shutil import copytree, copyfile
+from shutil import copytree, copyfile, rmtree
 
 def get_all_file_paths(directory): 
   
@@ -86,9 +86,7 @@ if __name__ == '__main__':
                 save_suffix = 'iter_%d' % total_iters if opt.save_by_iter else 'latest'
                 model.save_networks(save_suffix)
                 # additional saving routines
-                if not os.path.exists('saves'):
-                    os.mkdir('saves')
-                copytree('checkpoint/{}/web/'.format(opt.name), 'saves', dirs_exists_ok=True)
+                copytree('checkpoint/{}/web/'.format(opt.name), './saves')
                 copyfile('checkpoint/{}/latest_net_D_A.pth'.format(opt.name), 'saves/latest_net_D_A.pth')
                 copyfile('checkpoint/{}/latest_net_D_B.pth'.format(opt.name), 'saves/latest_net_D_B.pth')
                 copyfile('checkpoint/{}/latest_net_G_A.pth'.format(opt.name), 'saves/latest_net_G_A.pth')
@@ -100,6 +98,7 @@ if __name__ == '__main__':
                         zip.write(file) 
                         
                 copyfile('./saves_{}.zip'.format(total_iters), '../drive/My Drive/saves_{}.zip'.format(total_iters))
+                rmtree('saves')
 
             iter_data_time = time.time()
         if epoch % opt.save_epoch_freq == 0:              # cache our model every <save_epoch_freq> epochs
