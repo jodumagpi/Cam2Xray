@@ -1,7 +1,20 @@
 I'm experimenting with this repo.
 
-## Cat Paper Collection
-If you love cats, and love reading cool graphics, vision, and learning papers, please check out the Cat Paper [Collection](https://github.com/junyanz/CatPapers).
+## Citation
+If you use this code for your research, please cite our papers.
+```
+@inproceedings{CycleGAN2017,
+  title={Unpaired Image-to-Image Translation using Cycle-Consistent Adversarial Networkss},
+  author={Zhu, Jun-Yan and Park, Taesung and Isola, Phillip and Efros, Alexei A},
+  booktitle={Computer Vision (ICCV), 2017 IEEE International Conference on},
+  year={2017}
+}
 
-## Acknowledgments
-Our code is inspired by [pytorch-DCGAN](https://github.com/pytorch/examples/tree/master/dcgan).
+
+@inproceedings{isola2017image,
+  title={Image-to-Image Translation with Conditional Adversarial Networks},
+  author={Isola, Phillip and Zhu, Jun-Yan and Zhou, Tinghui and Efros, Alexei A},
+  booktitle={Computer Vision and Pattern Recognition (CVPR), 2017 IEEE Conference on},
+  year={2017}
+}
+```
