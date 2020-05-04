@@ -23,6 +23,24 @@ from options.train_options import TrainOptions
 from data import create_dataset
 from models import create_model
 from util.visualizer import Visualizer
+from zipfile import ZipFile 
+import os
+from shutil import copytree, copyfile
+
+def get_all_file_paths(directory): 
+  
+    # initializing empty file paths list 
+    file_paths = [] 
+  
+    # crawling through directory and subdirectories 
+    for root, directories, files in os.walk(directory): 
+        for filename in files: 
+            # join the two strings in order to form the full filepath. 
+            filepath = os.path.join(root, filename) 
+            file_paths.append(filepath) 
+  
+    # returning all file paths 
+    return file_paths
 
 if __name__ == '__main__':
     opt = TrainOptions().parse()   # get training options
@@ -67,6 +85,21 @@ if __name__ == '__main__':
                 print('saving the latest model (epoch %d, total_iters %d)' % (epoch, total_iters))
                 save_suffix = 'iter_%d' % total_iters if opt.save_by_iter else 'latest'
                 model.save_networks(save_suffix)
+                # additional saving routines
+                if not os.path.exists('saves'):
+                    os.mkdir('saves')
+                copytree('checkpoint/{}/web/'.format(opt.name), 'saves', dirs_exists_ok=True)
+                copyfile('checkpoint/{}/latest_net_D_A.pth'.format(opt.name), 'saves/latest_net_D_A.pth')
+                copyfile('checkpoint/{}/latest_net_D_B.pth'.format(opt.name), 'saves/latest_net_D_B.pth')
+                copyfile('checkpoint/{}/latest_net_G_A.pth'.format(opt.name), 'saves/latest_net_G_A.pth')
+                copyfile('checkpoint/{}/latest_net_G_B.pth'.format(opt.name), 'saves/latest_net_G_B.pth')
+
+                file_paths = get_all_file_paths('./saves') 
+                with ZipFile('saves_{}.zip'.format(total_iters),'w') as zip: 
+                    for file in file_paths: 
+                        zip.write(file) 
+                        
+                copyfile('./saves_{}.zip'.format(total_iters), '../drive/My Drive/saves_{}.zip'.format(total_iters))
 
             iter_data_time = time.time()
         if epoch % opt.save_epoch_freq == 0:              # cache our model every <save_epoch_freq> epochs
