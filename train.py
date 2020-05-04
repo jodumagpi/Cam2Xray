@@ -91,6 +91,9 @@ if __name__ == '__main__':
                 copyfile('checkpoint/{}/latest_net_D_B.pth'.format(opt.name), 'saves/latest_net_D_B.pth')
                 copyfile('checkpoint/{}/latest_net_G_A.pth'.format(opt.name), 'saves/latest_net_G_A.pth')
                 copyfile('checkpoint/{}/latest_net_G_B.pth'.format(opt.name), 'saves/latest_net_G_B.pth')
+                copyfile('checkpoint/{}/loss_log.txt'.format(opt.name), 'saves/loss_log.txt')
+                copyfile('checkpoint/{}/train_opt.txt'.format(opt.name), 'saves/train_opt.txt')
+                
 
                 file_paths = get_all_file_paths('./saves') 
                 with ZipFile('saves_{}.zip'.format(total_iters),'w') as zip: 
