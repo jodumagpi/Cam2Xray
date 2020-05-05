@@ -85,29 +85,26 @@ if __name__ == '__main__':
                 print('saving the latest model (epoch %d, total_iters %d)' % (epoch, total_iters))
                 save_suffix = 'iter_%d' % total_iters if opt.save_by_iter else 'latest'
                 model.save_networks(save_suffix)
-                # additional saving routines
-                copytree('checkpoint/{}/web/'.format(opt.name), './saves')
-                copyfile('checkpoint/{}/latest_net_D_A.pth'.format(opt.name), 'saves/latest_net_D_A.pth')
-                copyfile('checkpoint/{}/latest_net_D_B.pth'.format(opt.name), 'saves/latest_net_D_B.pth')
-                copyfile('checkpoint/{}/latest_net_G_A.pth'.format(opt.name), 'saves/latest_net_G_A.pth')
-                copyfile('checkpoint/{}/latest_net_G_B.pth'.format(opt.name), 'saves/latest_net_G_B.pth')
-                copyfile('checkpoint/{}/loss_log.txt'.format(opt.name), 'saves/loss_log.txt')
-                copyfile('checkpoint/{}/train_opt.txt'.format(opt.name), 'saves/train_opt.txt')
                 
-
-                file_paths = get_all_file_paths('./saves') 
-                with ZipFile('saves_{}.zip'.format(total_iters),'w') as zip: 
-                    for file in file_paths: 
-                        zip.write(file) 
-                        
-                copyfile('./saves_{}.zip'.format(total_iters), '../drive/My Drive/saves_{}.zip'.format(total_iters))
-                rmtree('saves')
-
             iter_data_time = time.time()
         if epoch % opt.save_epoch_freq == 0:              # cache our model every <save_epoch_freq> epochs
             print('saving the model at the end of epoch %d, iters %d' % (epoch, total_iters))
             model.save_networks('latest')
             model.save_networks(epoch)
+            # additional saving routines
+            copytree('checkpoint/{}/web/'.format(opt.name), './saves')
+            copyfile('checkpoint/{}/latest_net_D_A.pth'.format(opt.name), 'saves/latest_net_D_A.pth')
+            copyfile('checkpoint/{}/latest_net_D_B.pth'.format(opt.name), 'saves/latest_net_D_B.pth')
+            copyfile('checkpoint/{}/latest_net_G_A.pth'.format(opt.name), 'saves/latest_net_G_A.pth')
+            copyfile('checkpoint/{}/latest_net_G_B.pth'.format(opt.name), 'saves/latest_net_G_B.pth')
+            copyfile('checkpoint/{}/loss_log.txt'.format(opt.name), 'saves/loss_log.txt')
+            copyfile('checkpoint/{}/train_opt.txt'.format(opt.name), 'saves/train_opt.txt')
+            file_paths = get_all_file_paths('./saves') 
+            with ZipFile('saves_{}.zip'.format(epoch),'w') as zip: 
+                for file in file_paths: 
+                    zip.write(file) 
+            copyfile('./saves_{}.zip'.format(epoch), '../drive/My Drive/saves_{}.zip'.format(epoch))
+            rmtree('saves')
 
         print('End of epoch %d / %d \t Time Taken: %d sec' % (epoch, opt.n_epochs + opt.n_epochs_decay, time.time() - epoch_start_time))
         model.update_learning_rate()                     # update learning rates at the end of every epoch.
