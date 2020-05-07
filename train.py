@@ -105,6 +105,10 @@ if __name__ == '__main__':
                     zip.write(file) 
             copyfile('./saves_{}.zip'.format(epoch), '../drive/My Drive/saves_{}.zip'.format(epoch))
             rmtree('saves')
+            if epoch > 1: 
+                # prevent memory overload
+                os.remove('./saves_{}.zip'.format(epoch-1))
+                os.remove('../drive/My Drive/saves_{}.zip'.format(epoch-1))
 
         print('End of epoch %d / %d \t Time Taken: %d sec' % (epoch, opt.n_epochs + opt.n_epochs_decay, time.time() - epoch_start_time))
         model.update_learning_rate()                     # update learning rates at the end of every epoch.
