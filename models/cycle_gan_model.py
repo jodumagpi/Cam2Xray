@@ -80,6 +80,21 @@ class CycleGANModel(BaseModel):
                                             opt.n_layers_D, opt.norm, opt.init_type, opt.init_gain, self.gpu_ids)
             self.netD_B = networks.define_D(opt.input_nc, opt.ndf, opt.netD,
                                             opt.n_layers_D, opt.norm, opt.init_type, opt.init_gain, self.gpu_ids)
+        
+        # print network architectures
+        print('--------------------------------------------------')
+        print('\n Generator A:')
+        print(self.netG_A)
+        print('--------------------------------------------------')
+        print('\n Generator B:')
+        print(self.netG_B)
+        print('--------------------------------------------------')
+        print('\n Discriminator A:')
+        print(self.netD_A)
+        print('--------------------------------------------------')
+        print('\n Discriminator B:')
+        print(self.netD_B)
+        print('\n')
 
         if self.isTrain:
             if opt.lambda_identity > 0.0:  # only works when input and output images have the same number of channels
