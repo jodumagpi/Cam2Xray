@@ -100,15 +100,15 @@ if __name__ == '__main__':
             copyfile('checkpoint/{}/loss_log.txt'.format(opt.name), 'saves/loss_log.txt')
             copyfile('checkpoint/{}/train_opt.txt'.format(opt.name), 'saves/train_opt.txt')
             file_paths = get_all_file_paths('./saves') 
-            with ZipFile('saves_{}.zip'.format(epoch),'w') as zip: 
+            with ZipFile('{}_{}.zip'.format(opt.save_name, epoch),'w') as zip: 
                 for file in file_paths: 
                     zip.write(file) 
-            copyfile('./saves_{}.zip'.format(epoch), '../drive/My Drive/saves_{}.zip'.format(epoch))
+            copyfile('./{}_{}.zip'.format(opt.save_name, epoch), '../drive/My Drive/{}_{}.zip'.format(opt.save_name, epoch))
             rmtree('saves')
             if epoch > 1: 
                 # prevent memory overload
-                os.remove('./saves_{}.zip'.format(epoch-1))
-                os.remove('../drive/My Drive/saves_{}.zip'.format(epoch-1))
+                os.remove('./{}_{}.zip'.format(opt.save_name, epoch-1))
+                os.remove('../drive/My Drive/{}_{}.zip'.format(opt.save_name, epoch-1))
 
         print('End of epoch %d / %d \t Time Taken: %d sec' % (epoch, opt.n_epochs + opt.n_epochs_decay, time.time() - epoch_start_time))
         model.update_learning_rate()                     # update learning rates at the end of every epoch.
