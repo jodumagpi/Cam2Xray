@@ -122,14 +122,9 @@ def __make_power_2(img, base, method=Image.BICUBIC):
     __print_size_warning(ow, oh, w, h)
     return img.resize((w, h), method)
 
-
+# SCALE THE SMALLER DIMENSION (NOT JUST THE WIDTH)
 def __scale_width(img, target_size, crop_size, method=Image.BICUBIC):
-    ow, oh = img.size
-    if ow == target_size and oh >= crop_size:
-        return img
-    w = target_size
-    h = int(max(target_size * oh / ow, crop_size))
-    return img.resize((w, h), method)
+    return transforms.Resize(target_size)(img)
 
 
 def __crop(img, pos, size):
