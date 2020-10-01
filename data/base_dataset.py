@@ -9,38 +9,6 @@ from PIL import Image
 import torchvision.transforms as transforms
 from abc import ABC, abstractmethod
 
-class ResizeImg(object):
-    """Resize the bigger dimension."""
-
-    def __init__(self, size):
-        self.size = size
-
-    def __call__(self, image):
-        
-        # Resize
-        W, H = image.size
-        if W > H:
-            auto_size = int(self.size * H/W)
-            image = image.resize((self.size, auto_size))
-            # Paste
-            start = int((self.size-auto_size)/2)
-            image = np.array(image)
-            background = np.ones((self.size, self.size, 3)) * 255
-            background = background.astype(np.uint8)
-            background[start:start+auto_size, 0:self.size] = image
-        else:
-            auto_size = int(self.size * W/H)
-            image = image.resize((auto_size, self.size))
-            # Paste
-            start = int((self.size-auto_size)/2)
-            image = np.array(image)
-            background = np.ones((self.size, self.size, 3)) * 255
-            background = background.astype(np.uint8)
-            background[0:self.size, start:start+auto_size] = image
-        
-        return background
-
-
 class BaseDataset(data.Dataset, ABC):
     """This class is an abstract base class (ABC) for datasets.
 
@@ -114,7 +82,7 @@ def get_transform(opt, params=None, grayscale=False, method=Image.BICUBIC, conve
     if grayscale:
         transform_list.append(transforms.Grayscale(1))
     if 'resize' in opt.preprocess:
-        transform_list.append(ResizeImg(opt.load_size))
+        transform_list.append(transforms.Resize(opt.load_size))
     elif 'scale_width' in opt.preprocess:
         transform_list.append(transforms.Resize(opt.load_size))
         transform_list.append(transforms.Lambda(lambda img: __make_power_2(img, base=4, method=method)))
